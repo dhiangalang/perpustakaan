@@ -18,7 +18,7 @@ namespace Perpustakaan.Controllers
         // GET: Peminjaman
         public ActionResult Index()
         {
-            var peminjamans = db.Peminjamans.Include(p => p.User);
+            var peminjamans = db.Peminjamans.Include(p => p.User).Include(p => p.Buku);
             return View(peminjamans.ToList());
         }
 
@@ -40,7 +40,8 @@ namespace Perpustakaan.Controllers
         // GET: Peminjaman/Create
         public ActionResult Create()
         {
-            ViewBag.IDUser = new SelectList(db.Users, "IDUser", "Password");
+            ViewBag.IDUser = new SelectList(db.Users, "IDUser", "NamaUser");
+            ViewBag.IDBook = new SelectList(db.Bukus, "IDBook", "JudulBuku");
             return View();
         }
 
@@ -49,7 +50,7 @@ namespace Perpustakaan.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IDPeminjaman,IDUser,IDBuku,TanggalMulai,TanggalSelesai")] Peminjaman peminjaman)
+        public ActionResult Create([Bind(Include = "IDPeminjaman,IDUser,IDBook,TanggalMulai,TanggalSelesai")] Peminjaman peminjaman)
         {
             if (ModelState.IsValid)
             {
@@ -58,7 +59,8 @@ namespace Perpustakaan.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.IDUser = new SelectList(db.Users, "IDUser", "Password", peminjaman.IDUser);
+            ViewBag.IDUser = new SelectList(db.Users, "IDUser", "NamaUser", peminjaman.IDUser);
+            ViewBag.IDBook = new SelectList(db.Bukus, "IDBook", "JudulBuku", peminjaman.IDBook);
             return View(peminjaman);
         }
 
@@ -74,7 +76,8 @@ namespace Perpustakaan.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.IDUser = new SelectList(db.Users, "IDUser", "Password", peminjaman.IDUser);
+            ViewBag.IDUser = new SelectList(db.Users, "IDUser", "NamaUser", peminjaman.IDUser);
+            ViewBag.IDBook = new SelectList(db.Bukus, "IDBook", "JudulBuku", peminjaman.IDBook);
             return View(peminjaman);
         }
 
@@ -83,7 +86,7 @@ namespace Perpustakaan.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IDPeminjaman,IDUser,IDBuku,TanggalMulai,TanggalSelesai")] Peminjaman peminjaman)
+        public ActionResult Edit([Bind(Include = "IDPeminjaman,IDUser,IDBook,TanggalMulai,TanggalSelesai")] Peminjaman peminjaman)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +94,9 @@ namespace Perpustakaan.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.IDUser = new SelectList(db.Users, "IDUser", "Password", peminjaman.IDUser);
+            ViewBag.IDUser = new SelectList(db.Users, "IDUser", "NamaUser", peminjaman.IDUser);
+            ViewBag.IDBook = new SelectList(db.Bukus, "IDBook", "JudulBuku", peminjaman.IDBook);
+
             return View(peminjaman);
         }
 

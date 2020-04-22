@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Perpustakaan.Models
 {
@@ -9,9 +10,11 @@ namespace Perpustakaan.Models
 
     public class User
     {
-        [System.ComponentModel.DataAnnotations.Key]
+        [Key]
+        [Display(Name = "ID User")]
         public int IDUser { get; set; }
         public string Password { get; set; }
+        [Display(Name = "Nama User")]
         public string NamaUser { get; set; }
         public Role Role { get; set; }
 

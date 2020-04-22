@@ -12,13 +12,10 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.User.IDUser)
+            @Html.DisplayNameFor(model => model.User.NamaUser)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.User.Password)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IDBuku)
+            @Html.DisplayNameFor(model => model.Buku.JudulBuku)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.TanggalMulai)
@@ -32,16 +29,16 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.User.Password)
+            @Html.DisplayFor(modelItem => item.User.NamaUser)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.IDBuku)
+            @Html.DisplayFor(modelItem => item.Buku.JudulBuku)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.TanggalMulai)
+            @item.TanggalMulai.ToString("yyyy-MM-dd")
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.TanggalSelesai)
+            @item.TanggalSelesai.ToString("yyyy-MM-dd")
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.IDPeminjaman }) |
