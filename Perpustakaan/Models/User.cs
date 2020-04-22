@@ -13,6 +13,7 @@ namespace Perpustakaan.Models
         [Key]
         [Display(Name = "ID User")]
         public int IDUser { get; set; }
+        [DataType(DataType.Password)]
         public string Password { get; set; }
         [Display(Name = "Nama User")]
         public string NamaUser { get; set; }

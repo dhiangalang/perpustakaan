@@ -35,10 +35,10 @@
             @Html.DisplayFor(modelItem => item.Buku.JudulBuku)
         </td>
         <td>
-            @item.TanggalMulai.ToString("yyyy-MM-dd")
+            @Html.DisplayFor(modelItem => item.TanggalMulai)
         </td>
         <td>
-            @item.TanggalSelesai.ToString("yyyy-MM-dd")
+            @Html.DisplayFor(modelItem => item.TanggalSelesai)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.IDPeminjaman }) |

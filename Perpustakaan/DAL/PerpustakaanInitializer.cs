@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Web.Helpers;
 using System.Data.Entity;
+using System.Collections.Generic;
 using Perpustakaan.Models;
 
 namespace Perpustakaan.DAL
 {
-    public class PerpustakaanInitializer : DropCreateDatabaseIfModelChanges<PerpustakaanContext>
+    public class PerpustakaanInitializer : DropCreateDatabaseAlways<PerpustakaanContext>
     {
         protected override void Seed(PerpustakaanContext context)
         {
             List<User> users = new List<User>
             {
-                new User{Password="admin123",NamaUser="admin",Role=Role.Admin},
-                new User{Password="peminjam123",NamaUser="peminjam",Role=Role.Peminjam}
+                new User{Password=Crypto.HashPassword("admin123"),NamaUser="admin",Role=Role.Admin},
+                new User{Password=Crypto.HashPassword("peminjam123"),NamaUser="peminjam",Role=Role.Peminjam}
             };
 
             users.ForEach(u => context.Users.Add(u));

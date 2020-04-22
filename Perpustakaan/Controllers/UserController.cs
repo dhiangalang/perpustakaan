@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using Perpustakaan.DAL;
 using Perpustakaan.Models;
@@ -51,6 +52,8 @@ namespace Perpustakaan.Controllers
         {
             if (ModelState.IsValid)
             {
+                user.Password = Crypto.HashPassword(user.Password);
+
                 db.Users.Add(user);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -71,6 +74,8 @@ namespace Perpustakaan.Controllers
             {
                 return HttpNotFound();
             }
+            user.Password = string.Empty;
+
             return View(user);
         }
 
@@ -83,6 +88,8 @@ namespace Perpustakaan.Controllers
         {
             if (ModelState.IsValid)
             {
+                user.Password = Crypto.HashPassword(user.Password);
+
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
