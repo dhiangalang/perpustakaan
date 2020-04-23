@@ -52,8 +52,6 @@ namespace Perpustakaan.Controllers
         {
             if (ModelState.IsValid)
             {
-                user.Password = Crypto.HashPassword(user.Password);
-
                 db.Users.Add(user);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -88,8 +86,6 @@ namespace Perpustakaan.Controllers
         {
             if (ModelState.IsValid)
             {
-                user.Password = Crypto.HashPassword(user.Password);
-
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
