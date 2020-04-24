@@ -15,19 +15,40 @@
         <h4>Peminjaman</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
+        @*<div class="form-group">
             @Html.LabelFor(model => model.IDUser, "IDUser", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("IDUser", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.IDUser, "", new { @class = "text-danger" })
             </div>
-        </div>
+        </div>*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.IDBook, "IDBook", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("IDBook", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.IDBook, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Pengarang", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("Pengarang", null, htmlAttributes: new { @class = "form-control", @disabled = true })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("JenisBuku", "Judul Buku", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("JenisBuku", null, htmlAttributes: new { @class = "form-control", @disabled = true })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("HargaSewa", "Harga Sewa per Hari", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("HargaSewa", null, htmlAttributes: new { @class = "form-control", @disabled = true })
             </div>
         </div>
 
@@ -75,5 +96,25 @@
                 dateFormat: "yy-mm-dd"
             });
         })
+
+        $(function () {
+            $("select#IDBook").change(function () {
+                PostGetDetailsBukuJson();
+            });
+        });
+
+        $(document).ready(function () {
+            PostGetDetailsBukuJson();
+        });
+
+        function PostGetDetailsBukuJson() {
+            let IDBook = $("select#IDBook").val();
+
+            $.post("@Url.Action("DetailsBukuJson", "Peminjaman")", { id: IDBook }, function (data, status) {
+                $("input#Pengarang").val(data['Pengarang']);
+                $("input#JenisBuku").val(data['JenisBuku']);
+                $("input#HargaSewa").val(data['HargaSewa']);
+            });
+        }
     </script>
 }

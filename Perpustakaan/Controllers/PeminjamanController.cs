@@ -37,6 +37,14 @@ namespace Perpustakaan.Controllers
             return View(peminjaman);
         }
 
+        // GET: Buku/DetailsBukuJson
+        public ActionResult DetailsBukuJson(int id)
+        {
+            Buku buku = db.Bukus.Find(id);
+
+            return Json(buku);
+        }
+
         // GET: Peminjaman/Create
         public ActionResult Create()
         {
