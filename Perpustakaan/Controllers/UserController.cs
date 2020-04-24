@@ -74,7 +74,8 @@ namespace Perpustakaan.Controllers
             User user = db.Users.Find(id);
             if (user == null)
             {
-                return HttpNotFound();
+                Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("User tidak ditemukan.");
+                return RedirectToAction("Index");
             }
             return View(user);
         }
@@ -96,7 +97,7 @@ namespace Perpustakaan.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!((bool)ViewData[AppConstants.ViewBagKey.FORBIDEN]))
+                try
                 {
                     user.Password = Crypto.HashPassword(user.Password);
 
@@ -106,7 +107,7 @@ namespace Perpustakaan.Controllers
 
                     return RedirectToAction("Index");
                 }
-                else
+                catch (Exception ex)
                 {
                     Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Gagal membuat user {0}.", user.NamaUser);
                 }
@@ -127,7 +128,8 @@ namespace Perpustakaan.Controllers
             User user = db.Users.Find(id);
             if (user == null)
             {
-                return HttpNotFound();
+                Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("User tidak ditemukan.");
+                return RedirectToAction("Index");
             }
             user.Password = string.Empty;
 
@@ -144,7 +146,7 @@ namespace Perpustakaan.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!((bool)ViewData[AppConstants.ViewBagKey.FORBIDEN]))
+                try
                 {
                     //prevent user with role peminjam being naughty
                     User authUser = (User)Session[AppConstants.SessionKey.USER_SESSION];
@@ -161,7 +163,7 @@ namespace Perpustakaan.Controllers
 
                     return RedirectToAction("Index");
                 }
-                else
+                catch (Exception ex)
                 {
                     Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Gagal mengubah user {0}.", user.NamaUser);
                 }
@@ -182,7 +184,8 @@ namespace Perpustakaan.Controllers
             User user = db.Users.Find(id);
             if (user == null)
             {
-                return HttpNotFound();
+                Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("User tidak ditemukan.");
+                return RedirectToAction("Index");
             }
             return View(user);
         }
@@ -206,16 +209,18 @@ namespace Perpustakaan.Controllers
                 Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Tidak bisa menghapus diri sendiri.");
                 return RedirectToAction("Index");
             }
-            if ((bool)ViewData[AppConstants.ViewBagKey.FORBIDEN])
+            try
+            {
+                db.Users.Remove(user);
+                db.SaveChanges();
+
+                Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Berhasil menghapus user {0}.", user.NamaUser);
+            }
+            catch
             {
                 Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Gagal menghapus user {0}.", user.NamaUser);
-                return RedirectToAction("Index");
             }
 
-            db.Users.Remove(user);
-            db.SaveChanges();
-
-            Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Berhasil menghapus user {0}.", user.NamaUser);
             return RedirectToAction("Index");
         }
 

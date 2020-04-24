@@ -8,9 +8,11 @@ using System.Web;
 using System.Web.Mvc;
 using Perpustakaan.DAL;
 using Perpustakaan.Models;
+using Perpustakaan.Helpers;
 
 namespace Perpustakaan.Controllers
 {
+    [AuthorizeUser(Role.Admin)]
     public class BukuController : Controller
     {
         private PerpustakaanContext db = new PerpustakaanContext();
@@ -31,7 +33,8 @@ namespace Perpustakaan.Controllers
             Buku buku = db.Bukus.Find(id);
             if (buku == null)
             {
-                return HttpNotFound();
+                Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Buku tidak ditemukan.");
+                return RedirectToAction("Index");
             }
             return View(buku);
         }
@@ -51,9 +54,20 @@ namespace Perpustakaan.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Bukus.Add(buku);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Gagal membuat buku dengan judul {0}.", buku.JudulBuku);
+
+                try
+                {
+                    db.Bukus.Add(buku);
+                    db.SaveChanges();
+                    Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Berhasil membuat buku dengan judul {0}.", buku.JudulBuku);
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    // Can do error login here. I will leave it empty for now.
+                }
             }
 
             return View(buku);
@@ -69,7 +83,8 @@ namespace Perpustakaan.Controllers
             Buku buku = db.Bukus.Find(id);
             if (buku == null)
             {
-                return HttpNotFound();
+                Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Buku tidak ditemukan.");
+                return RedirectToAction("Index");
             }
             return View(buku);
         }
@@ -83,9 +98,20 @@ namespace Perpustakaan.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(buku).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Gagal mengedit buku dengan judul {0}.", buku.JudulBuku);
+
+                try
+                {
+                    db.Entry(buku).State = EntityState.Modified;
+                    db.SaveChanges();
+                    Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Berhasil mengedit buku dengan judul {0}.", buku.JudulBuku);
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    // Can do error login here. I will leave it empty for now.
+                }
             }
             return View(buku);
         }
@@ -100,7 +126,8 @@ namespace Perpustakaan.Controllers
             Buku buku = db.Bukus.Find(id);
             if (buku == null)
             {
-                return HttpNotFound();
+                Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Buku tidak ditemukan.");
+                return RedirectToAction("Index");
             }
             return View(buku);
         }
@@ -111,8 +138,24 @@ namespace Perpustakaan.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Buku buku = db.Bukus.Find(id);
-            db.Bukus.Remove(buku);
-            db.SaveChanges();
+            Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Gagal menghapus buku dengan judul {0}.", buku.JudulBuku);
+
+            if (buku == null)
+            {
+                Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Buku tidak ditemukan.");
+                return RedirectToAction("Index");
+            }
+            try
+            {
+                db.Bukus.Remove(buku);
+                db.SaveChanges();
+                Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Berhasil menghapus buku dengan judul {0}.", buku.JudulBuku);
+            }
+            catch (Exception ex)
+            {
+                // Can do error login here. I will leave it empty for now.
+            }
+
             return RedirectToAction("Index");
         }
 

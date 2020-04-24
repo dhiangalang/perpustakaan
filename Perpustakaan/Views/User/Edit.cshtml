@@ -8,15 +8,10 @@
 
 <h2>@ViewBag.Title</h2>
 
-@if (ViewData[AppConstants.ViewBagKey.FORBIDEN] != null && (bool)ViewData[AppConstants.ViewBagKey.FORBIDEN])
+
+@using (Html.BeginForm())
 {
-    <h3>Kamu tidak punya akses ke halaman ini. Silakan melakukan <a href="/user/login">login</a> dengan User yang mempunyai akses ke halaman ini.</h3>
-}
-else
-{
-    using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
+    @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
         <h4>User</h4>
@@ -61,13 +56,12 @@ else
             </div>
         </div>
     </div>
-    }
+}
 
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 }

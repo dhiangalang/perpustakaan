@@ -25,22 +25,16 @@ namespace Perpustakaan.Helpers
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            filterContext.Controller.ViewData[AppConstants.ViewBagKey.FORBIDEN] = false;
-
             User user = (User)filterContext.HttpContext.Session[AppConstants.SessionKey.USER_SESSION];
             if (user == null)
             {
-                filterContext.Controller.ViewData[AppConstants.ViewBagKey.FORBIDEN] = true;
-
-                //filterContext.Result = new RedirectResult(string.Format("/User/Login", filterContext.HttpContext.Request.Url.AbsolutePath, _role));
+                throw new HttpException(403, "Maaf, anda tidak punya akses ke fitur yang ada di halaman ini.");
             }
             else
             {
                 if (_allowedRole != null && _allowedRole != user.Role)
                 {
-                    filterContext.Controller.ViewData[AppConstants.ViewBagKey.FORBIDEN] = true;
-
-                    //throw new HttpException(403, "Maaf, anda tidak punya akses ke fitur yang ada di halaman ini.");
+                    throw new HttpException(403, "Maaf, anda tidak punya akses ke fitur yang ada di halaman ini.");
                 }
 
                 // get id from param if exist
@@ -51,7 +45,7 @@ namespace Perpustakaan.Helpers
                     // if not admin check edit, details or delete user id
                     if (user.Role != Models.Role.Admin && !userIdKey.Equals(default(KeyValuePair<string, object>)) && (int)userIdKey.Value != user.IDUser)
                     {
-                        filterContext.Controller.ViewData[AppConstants.ViewBagKey.FORBIDEN] = true;
+                        throw new HttpException(403, "Maaf, anda tidak punya akses ke fitur yang ada di halaman ini.");
                     }
                 }
             }
