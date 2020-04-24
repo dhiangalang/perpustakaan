@@ -60,6 +60,8 @@ namespace Perpustakaan.Controllers
                     return RedirectToAction("Index", "Home");
                 }
             }
+            Session[AppConstants.SessionKey.POPUP_MESSAGE] = string.Format("Gagal melakukan login.");
+
             return View(loginUser);
         }
 

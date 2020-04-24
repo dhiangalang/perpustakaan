@@ -9,9 +9,12 @@ namespace Perpustakaan.Models
     {
         [DataType(DataType.Password)]
         [StringLength(100)]
+        [Required]
         public string Password { get; set; }
+
         [Display(Name = "Nama User")]
         [StringLength(100)]
+        [Required]
         public string NamaUser { get; set; }
     }
 }
