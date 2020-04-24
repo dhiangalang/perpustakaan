@@ -5,7 +5,7 @@ using System.Web.Helpers;
 
 namespace Perpustakaan.DAL
 {
-    public class PerpustakaanInitializer : DropCreateDatabaseAlways<PerpustakaanContext>
+    public class PerpustakaanInitializer : DropCreateDatabaseIfModelChanges<PerpustakaanContext>
     {
         protected override void Seed(PerpustakaanContext context)
         {

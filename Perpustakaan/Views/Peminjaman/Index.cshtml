@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Perpustakaan.Models.Peminjaman>
+﻿@using Perpustakaan.Models
+@using Perpustakaan.Helpers
+@model IEnumerable<Peminjaman>
 
 @{
     ViewBag.Title = "Index";
@@ -7,45 +9,82 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @if (((User)Session[AppConstants.SessionKey.USER_SESSION]).Role == Role.Peminjam)
+    {
+        @Html.ActionLink("Create New", "Create");
+    }
 </p>
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.User.NamaUser)
-        </th>
+        @if (((User)Session[AppConstants.SessionKey.USER_SESSION]).Role == Role.Admin)
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.User.NamaUser)
+            </th>
+        }
         <th>
             @Html.DisplayNameFor(model => model.Buku.JudulBuku)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TanggalMulai)
+            @Html.DisplayNameFor(model => model.Buku.Pengarang)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TanggalSelesai)
+            @Html.DisplayNameFor(model => model.Buku.JenisBuku)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Buku.HargaSewa)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.JumlahHari)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalHarga)
         </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.User.NamaUser)
-        </td>
+        @if (((User)Session[AppConstants.SessionKey.USER_SESSION]).Role == Role.Admin)
+        {
+            <td>
+                @Html.DisplayFor(model => item.User.NamaUser)
+            </td>
+        }
         <td>
             @Html.DisplayFor(modelItem => item.Buku.JudulBuku)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.TanggalMulai)
+            @Html.DisplayFor(modelItem => item.Buku.Pengarang)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.TanggalSelesai)
+            @Html.DisplayFor(modelItem => item.Buku.JenisBuku)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IDPeminjaman }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IDPeminjaman }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IDPeminjaman })
+            @Html.DisplayFor(modelItem => item.Buku.HargaSewa)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.JumlahHari)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalHarga)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.IDPeminjaman })
+            @if (((User)Session[AppConstants.SessionKey.USER_SESSION]).Role == Role.Peminjam)
+            {
+                @Html.Raw(" | ");
+                @Html.ActionLink("Details", "Details", new { id = item.IDPeminjaman });
+                @Html.Raw(" | ");
+                @Html.ActionLink("Delete", "Delete", new { id = item.IDPeminjaman });
+            }
         </td>
     </tr>
 }
-
+    <tr>
+        <td colspan="@(((User)Session[AppConstants.SessionKey.USER_SESSION]).Role == Role.Peminjam ? 3 : 4)"></td>
+        <td colspan="2">GRAND TOTAL SEWA</td>
+        <td>@ViewBag.GrandTotal</td>
+        <td></td>
+    </tr>
 </table>
