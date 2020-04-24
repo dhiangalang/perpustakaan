@@ -23,7 +23,7 @@ namespace Perpustakaan.Models
         [Display(Name = "Jumlah Hari Sewa")]
         public int JumlahHari { get; set; }
 
-        [Display(Name = "Total Sewa")]
+        [Display(Name = "Total Sewa (Rp)")]
         public int TotalHarga { get; set; }
 
         public virtual User User { get; set; }

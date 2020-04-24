@@ -23,10 +23,16 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("User", "Index", "User")</li>
-                    <li>@Html.ActionLink("Buku", "Index", "Buku")</li>
-                    <li>@Html.ActionLink("Peminjaman", "Index", "Peminjaman")</li>
+                    @if (Session[AppConstants.SessionKey.USER_SESSION] != null)
+                    {
+                        <li>@Html.ActionLink("User", "Index", "User")</li>
+                        if (((User)Session[AppConstants.SessionKey.USER_SESSION]).Role == Role.Admin)
+                        {
+                            <li>@Html.ActionLink("Buku", "Index", "Buku")</li>
+                        }
+                        <li>@Html.ActionLink("Peminjaman", "Index", "Peminjaman")</li>
+                    }
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (Session[AppConstants.SessionKey.USER_SESSION] != null)

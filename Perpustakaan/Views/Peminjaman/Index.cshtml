@@ -70,11 +70,11 @@
             @Html.DisplayFor(modelItem => item.TotalHarga)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.IDPeminjaman })
+            @Html.ActionLink("Details", "Details", new { id = item.IDPeminjaman })
             @if (((User)Session[AppConstants.SessionKey.USER_SESSION]).Role == Role.Peminjam)
             {
                 @Html.Raw(" | ");
-                @Html.ActionLink("Details", "Details", new { id = item.IDPeminjaman });
+                @Html.ActionLink("Edit", "Edit", new { id = item.IDPeminjaman });
                 @Html.Raw(" | ");
                 @Html.ActionLink("Delete", "Delete", new { id = item.IDPeminjaman });
             }
