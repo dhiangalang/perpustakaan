@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Perpustakaan.Helpers
+@using Perpustakaan.Models
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -26,11 +28,24 @@
                     <li>@Html.ActionLink("Buku", "Index", "Buku")</li>
                     <li>@Html.ActionLink("Peminjaman", "Index", "Peminjaman")</li>
                 </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    @if (Session[AppConstants.SessionKey.USER_SESSION] != null)
+                    {
+                        User user = (User)Session[AppConstants.SessionKey.USER_SESSION];
+                        <li><a>Halo @user.NamaUser!</a></li>
+                        <li>@Html.ActionLink("Logout", "Logout", "User")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Login", "Login", "User")</li>
+                    }
+                </ul>
             </div>
         </div>
     </div>
     <div class="container body-content">
         @RenderBody()
+
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - Dhian Galang</p>
@@ -40,5 +55,17 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var msg = "@Session[AppConstants.SessionKey.POPUP_MESSAGE]";
+            if (msg != "") {
+                alert(msg);
+                @{
+                    Session.Remove(AppConstants.SessionKey.POPUP_MESSAGE);
+                }
+            }
+        });
+    </script>
 </body>
 </html>

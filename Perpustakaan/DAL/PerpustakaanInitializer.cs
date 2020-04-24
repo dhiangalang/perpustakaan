@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Collections.Generic;
 using Perpustakaan.Models;
+using System.Web.Helpers;
 
 namespace Perpustakaan.DAL
 {
@@ -10,8 +11,8 @@ namespace Perpustakaan.DAL
         {
             List<User> users = new List<User>
             {
-                new User{Password="admin123",NamaUser="admin",Role=Role.Admin},
-                new User{Password="peminjam123",NamaUser="peminjam",Role=Role.Peminjam}
+                new User{Password=Crypto.HashPassword("admin123"),NamaUser="admin",Role=Role.Admin},
+                new User{Password=Crypto.HashPassword("peminjam123"),NamaUser="peminjam",Role=Role.Peminjam}
             };
 
             users.ForEach(u => context.Users.Add(u));

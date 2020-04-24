@@ -1,51 +1,66 @@
-﻿@model IEnumerable<Perpustakaan.Models.User>
+﻿@using Perpustakaan.Helpers
+@using Perpustakaan.Models
+@model IEnumerable<User>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Daftar User";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.IDUser)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Password)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NamaUser)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Role)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.IDUser)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Password)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NamaUser)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Role)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.IDUser }) |
-            @Html.ActionLink("Details", "Details", new { id = item.IDUser }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.IDUser })
-        </td>
-    </tr>
+@if (ViewData[AppConstants.ViewBagKey.FORBIDEN] != null && (bool)ViewData[AppConstants.ViewBagKey.FORBIDEN])
+{
+    <h3>Kamu tidak punya akses ke halaman ini. Silakan melakukan <a href="/user/login">login</a> dengan User yang mempunyai akses ke halaman ini.</h3>
 }
+else
+{
+    <p>
+        @if (((User)Session[AppConstants.SessionKey.USER_SESSION]).Role == Role.Admin)
+        {
+            @Html.ActionLink("Create New", "Create")
+        }
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IDUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NamaUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Role)
+            </th>
+            <th></th>
+        </tr>
 
-</table>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDUser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NamaUser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.IDUser }) |
+                @Html.ActionLink("Details", "Details", new { id = item.IDUser }) |
+                @if (((User)Session[AppConstants.SessionKey.USER_SESSION]).Role == Role.Admin)
+                {
+                    @Html.ActionLink("Delete", "Delete", new { id = item.IDUser })
+                }
+            </td>
+        </tr>
+    }
+    </table>
+}
